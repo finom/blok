@@ -29,8 +29,11 @@ export async function getExchangeValue(wallets: WalletInput): Promise<WalletOutp
     try {
 
       const balance = await getWalletBalance(currency, walletAddress);
+      const allRates = await getExchangeRates(currency);
 
-      const exchanges = (await getExchangeRates(currency)).filter(({ exchangeRate }) => typeof exchangeRate === 'number' && exchangeRate > 0);
+      console.log('allRates', allRates)
+
+      const exchanges = allRates.filter(({ exchangeRate }) => typeof exchangeRate === 'number' && exchangeRate > 0);
 
       if (exchanges.length === 0) {
         throw new Error(`No exchange rates found for ${currency}`);
