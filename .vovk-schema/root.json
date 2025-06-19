@@ -1,0 +1,46 @@
+{
+  "$schema": "https://vovk.dev/api/spec/v3/segment.json",
+  "emitSchema": true,
+  "segmentName": "",
+  "controllers": {
+    "ExchangeRPC": {
+      "rpcModuleName": "ExchangeRPC",
+      "originalControllerName": "ExchangeController",
+      "prefix": "exchanges",
+      "handlers": {
+        "getExchangeValue": {
+          "validation": {},
+          "path": "",
+          "httpMethod": "GET",
+          "openapi": {
+            "summary": "Get Exchanges"
+          }
+        },
+        "getExchangeValueByCurrency": {
+          "validation": {
+            "params": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string",
+                  "enum": [
+                    "BTC",
+                    "ETH",
+                    "SOL"
+                  ]
+                }
+              },
+              "required": [
+                "currency"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "path": ":currency",
+          "httpMethod": "GET"
+        }
+      }
+    }
+  }
+}
