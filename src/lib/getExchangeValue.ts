@@ -236,6 +236,7 @@ async function getExchangeRate(currency: string, exchange: string): Promise<numb
     switch (exchange.toLowerCase()) {
       case 'binance':
         const binanceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+        console.log('binanceResponse', binanceResponse)
         if (!binanceResponse.ok) {
           return null;
         }
