@@ -24,6 +24,7 @@ interface WalletOutput {
 
 export async function getExchangeValue(wallets: WalletInput): Promise<WalletOutput> {
   const result: WalletOutput = {};
+  console.log('getExchangeValue', wallets);
   
   for (const [currency, walletAddress] of Object.entries(wallets)) {
     try {
