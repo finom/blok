@@ -24,13 +24,13 @@ export default class ExchangeService {
 
       const balance = await getWalletBalance(currency, walletAddress);
 
-      const exchanges = await getExchangeRates(currency);
-      
+      const exchanges = (await getExchangeRates(currency)).filter(({ exchangeRate }) => typeof exchangeRate === 'number' && exchangeRate > 0);
+
       if (exchanges.length === 0) {
         throw new Error(`No exchange rates found for ${currency}`);
       }
 
-      const averageRate = exchanges.reduce((sum, exchange) => sum + exchange.exchangeRate, 0) / exchanges.length;
+      const averageRate = exchanges.reduce((sum, exchange) => sum + exchange.exchangeRate!, 0) / exchanges.length;
       const calculatedValue = balance * averageRate;
       
 

@@ -7,7 +7,7 @@ interface WalletInput {
 
 interface ExchangeInfo {
   exchangeName: string;
-  exchangeRate: number;
+  exchangeRate: number | null;
 }
 
 interface WalletData {
@@ -30,14 +30,13 @@ export async function getExchangeValue(wallets: WalletInput): Promise<WalletOutp
 
       const balance = await getWalletBalance(currency, walletAddress);
 
-      const exchanges = await getExchangeRates(currency);
-      
+      const exchanges = (await getExchangeRates(currency)).filter(({ exchangeRate }) => typeof exchangeRate === 'number' && exchangeRate > 0);
+
       if (exchanges.length === 0) {
         throw new Error(`No exchange rates found for ${currency}`);
       }
 
-      const averageRate = exchanges.reduce((sum, exchange) => sum + exchange.exchangeRate, 0) / exchanges.length;
-      
+      const averageRate = exchanges.reduce((sum, exchange) => sum + exchange.exchangeRate!, 0) / exchanges.length;
 
       const calculatedValue = balance * averageRate;
       
@@ -181,7 +180,7 @@ async function getEthereumBalance(address: string): Promise<number> {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       
-      const data = await response.json();
+      const data = await response.json() as KnownAny;
       
       if (data.error) {
         throw new Error(`RPC error: ${data.error.message || JSON.stringify(data.error)}`);
@@ -222,7 +221,7 @@ async function getSolanaBalance(address: string): Promise<number> {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     
-    const data = await response.json();
+    const data = await response.json() as KnownAny;
     // Convert lamports to SOL
     return data.result.value / 1e9;
   } catch (error) {
@@ -231,24 +230,24 @@ async function getSolanaBalance(address: string): Promise<number> {
   }
 }
 
-async function getExchangeRate(currency: string, exchange: string): Promise<number> {
+async function getExchangeRate(currency: string, exchange: string): Promise<number | null> {
   try {
     const symbol = `${currency.toUpperCase()}USDT`;
     switch (exchange.toLowerCase()) {
       case 'binance':
         const binanceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
         if (!binanceResponse.ok) {
-          throw new Error(`HTTP error! Status: ${binanceResponse.status}`);
+          return null;
         }
-        const binanceData = await binanceResponse.json();
+        const binanceData = await binanceResponse.json() as KnownAny;
         return parseFloat(binanceData.price);
         
       case 'coinbase':
         const coinbaseResponse = await fetch(`https://api.coinbase.com/v2/exchange-rates?currency=${currency.toUpperCase()}`);
         if (!coinbaseResponse.ok) {
-          throw new Error(`HTTP error! Status: ${coinbaseResponse.status}`);
+          return null;
         }
-        const coinbaseData = await coinbaseResponse.json();
+        const coinbaseData = await coinbaseResponse.json() as KnownAny;
         return parseFloat(coinbaseData.data.rates.USD);
 
       default:
