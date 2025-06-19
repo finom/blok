@@ -240,8 +240,9 @@ async function getExchangeRate(currency: string, exchange: string): Promise<numb
     switch (exchange.toLowerCase()) {
       case 'binance':
         const binanceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
-        console.log('binanceResponse', binanceResponse)
         if (!binanceResponse.ok) {
+          console.log('binanceResponse code', binanceResponse.status)
+
           return null;
         }
         const binanceData = await binanceResponse.json() as KnownAny;
@@ -250,6 +251,8 @@ async function getExchangeRate(currency: string, exchange: string): Promise<numb
       case 'coinbase':
         const coinbaseResponse = await fetch(`https://api.coinbase.com/v2/exchange-rates?currency=${currency.toUpperCase()}`);
         if (!coinbaseResponse.ok) {
+          console.log('coinbaseResponse code', coinbaseResponse.status)
+
           return null;
         }
         const coinbaseData = await coinbaseResponse.json() as KnownAny;
