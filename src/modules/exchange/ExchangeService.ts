@@ -315,17 +315,9 @@ export default class ExchangeService {
       };
     } catch (error) {
       console.error("Error fetching wallet balances or prices:", error);
-      try {
-        // If all fails, at least return ETH balance
-        return {
-          eth: await this.getEthBalance(this.wallets.ETH),
-          error: error instanceof Error ? error.message : String(error),
-        };
-      } catch {
-        return {
-          error: "Failed to get any wallet balances",
-        };
-      }
+      return {
+        error: "Failed to get any wallet balances",
+      };
     }
   }
 }

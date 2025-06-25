@@ -10,7 +10,7 @@ export default class ExchangeController {
   })
   @get("", { cors: true })
   static getBalances = withZod({
-    handle: ExchangeService.getBalances,
+    handle: () => ExchangeService.getBalances(),
   });
 
   @openapi({
