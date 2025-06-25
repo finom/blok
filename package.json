@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@moralisweb3/common-evm-utils": "^2.27.2",
     "@tanstack/react-query": "^5.80.7",
+    "moralis": "^2.27.2",
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

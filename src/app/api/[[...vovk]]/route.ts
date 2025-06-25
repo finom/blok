@@ -1,7 +1,7 @@
 import { initVovk } from "vovk";
 import ExchangeController from "../../../modules/exchange/ExchangeController";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const controllers = {
   ExchangeRPC: ExchangeController,
