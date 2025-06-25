@@ -6,14 +6,22 @@
     "ExchangeRPC": {
       "rpcModuleName": "ExchangeRPC",
       "originalControllerName": "ExchangeController",
-      "prefix": "exchanges",
+      "prefix": "balance",
       "handlers": {
-        "getTokenPrices": {
+        "getBalances": {
           "validation": {},
           "path": "",
           "httpMethod": "GET",
           "openapi": {
-            "summary": "Get Exchanges"
+            "summary": "Get Balance"
+          }
+        },
+        "getTokenBalance": {
+          "validation": {},
+          "path": "total",
+          "httpMethod": "GET",
+          "openapi": {
+            "summary": "Get Token Balance"
           }
         }
       }

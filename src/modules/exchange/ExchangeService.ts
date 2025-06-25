@@ -265,7 +265,7 @@ export default class ExchangeService {
     }
   }
 
-  static async getTokenPrices() {
+  static async getBalances() {
     try {
       // Get all wallet balances first
       const ethBalance = await this.getEthBalance(this.wallets.ETH);
@@ -289,7 +289,7 @@ export default class ExchangeService {
 
       const priceData = (await priceResponse.json()) as CoinMarketCapResponse;
 
-      return {
+      const results = {
         eth: {
           ...ethBalance,
           price: priceData.data.ETH?.quote.USD.price || 0,
@@ -302,6 +302,16 @@ export default class ExchangeService {
           ...solBalance,
           price: priceData.data.SOL?.quote.USD.price || 0,
         },
+      };
+
+      const totalBalance = Object.values(results).reduce(
+        (acc, token) => acc + token.balance * token.price,
+        0,
+      );
+
+      return {
+        results,
+        totalBalance,
       };
     } catch (error) {
       console.error("Error fetching wallet balances or prices:", error);

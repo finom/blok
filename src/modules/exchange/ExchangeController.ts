@@ -3,15 +3,24 @@ import { withZod } from "vovk-zod";
 
 import ExchangeService from "./ExchangeService";
 
-@prefix("exchanges")
+@prefix("balance")
 export default class ExchangeController {
   @openapi({
-    summary: "Get Exchanges",
+    summary: "Get Balance",
   })
   @get("", { cors: true })
-  static getTokenPrices = withZod({
-    handle: () => {
-      return ExchangeService.getTokenPrices();
-    },
+  static getBalances = withZod({
+    handle: ExchangeService.getBalances,
+  });
+
+  @openapi({
+    summary: "Get Token Balance",
+  })
+  @get("total", { cors: true })
+  static getTokenBalance = withZod({
+    handle: async () => {
+      const { totalBalance } = await ExchangeService.getBalances();
+      return totalBalance;
+    }
   });
 }
