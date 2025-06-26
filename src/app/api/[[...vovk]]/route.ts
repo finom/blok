@@ -12,4 +12,7 @@ export type Controllers = typeof controllers;
 export const { GET, POST, PATCH, PUT, HEAD, OPTIONS, DELETE } = initVovk({
   emitSchema: true,
   controllers,
+  onError: (error) => {
+    console.error("Vovk Error:", error);
+  }
 });
