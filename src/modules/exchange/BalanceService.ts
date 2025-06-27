@@ -70,7 +70,7 @@ interface EthereumRpcResponse {
 
 export default class BalanceService {
   static async getEthBalance(address: string): Promise<TokenBalance> {
-    const redis = await createClient().connect();
+    const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
     try {
       // Try to fetch latest balance
@@ -160,7 +160,7 @@ export default class BalanceService {
   }
 
   static async getBtcBalance(address: string): Promise<TokenBalance> {
-    const redis = await createClient().connect();
+    const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
     try {
       // Try to fetch latest balance
@@ -233,7 +233,7 @@ export default class BalanceService {
   }
 
   static async getSolBalance(address: string): Promise<TokenBalance> {
-    const redis = await createClient().connect();
+    const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
     try {
       // Try to fetch latest balance

@@ -19,7 +19,7 @@ interface CoinMarketCapResponse {
 
 export default class PriceService {
     static async getPrice() {
-        const redis = await createClient().connect();
+        const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
         try {
             // Try to fetch latest prices
