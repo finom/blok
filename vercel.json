@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/fetch",
-      "schedule": "*/10 * * * *"
+      "schedule": "*/1 * * * *"
     }
   ],
   "regions": ["lhr1"]

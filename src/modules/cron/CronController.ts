@@ -7,7 +7,7 @@ import BalanceService from "../exchange/BalanceService";
 export default class CronController {
   @get("fetch")
   @cronGuard()
-  async fetchBalancesAndPrices() {
+  static async fetchBalancesAndPrices() {
     PriceService.getPrice();
     BalanceService.getCachedAllBalances();
   }
