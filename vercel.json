@@ -1,0 +1,9 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/fetch",
+      "schedule": "*/1 * * * *"
+    }
+  ],
+  "regions": ["lhr1"]
+}

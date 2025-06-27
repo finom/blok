@@ -66,12 +66,60 @@ interface EthereumRpcResponse {
     message: string;
   };
 }
-
-
-export default class BalanceService {
-  static async getEthBalance(address: string): Promise<TokenBalance> {
     const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
+export default class BalanceService {
+  static async getCachedEthBalance(address: string): Promise<TokenBalance> {
+    try {
+      // Try to get cached data from Redis
+      const cachedData = await redis.get(`eth_balance_${address}`);
+      if (cachedData) {
+        return JSON.parse(cachedData) as TokenBalance;
+      }
+    } catch (error) {
+      console.error('Error fetching cached ETH balance from Redis:', error);
+    }
+    // If no cached data, fetch the latest balance
+    return await this.getEthBalance(address);
+  }
+
+  static async getCachedBtcBalance(address: string): Promise<TokenBalance> {
+    try {
+      // Try to get cached data from Redis
+      const cachedData = await redis.get(`btc_balance_${address}`);
+      if (cachedData) {
+        return JSON.parse(cachedData) as TokenBalance;
+      }
+    } catch (error) {
+      console.error('Error fetching cached BTC balance from Redis:', error);
+    }
+    // If no cached data, fetch the latest balance
+    return await this.getBtcBalance(address);
+  }
+
+  static async getCachedSolBalance(address: string): Promise<TokenBalance> {
+    try {
+      // Try to get cached data from Redis
+      const cachedData = await redis.get(`sol_balance_${address}`);
+      if (cachedData) {
+        return JSON.parse(cachedData) as TokenBalance;
+      }
+    } catch (error) {
+      console.error('Error fetching cached SOL balance from Redis:', error);
+    }
+    // If no cached data, fetch the latest balance
+    return await this.getSolBalance(address);
+  }
+
+  static getBalances() {
+    return {
+      eth: this.getCachedEthBalance(ConfigService.wallets.ETH),
+      btc: this.getCachedBtcBalance(ConfigService.wallets.BTC),
+      sol: this.getCachedSolBalance(ConfigService.wallets.SOL),
+    };
+  }
+
+  static async getEthBalance(address: string): Promise<TokenBalance> {
     try {
       // Try to fetch latest balance
       const balanceData = await this.fetchEthBalance(address);
@@ -160,7 +208,6 @@ export default class BalanceService {
   }
 
   static async getBtcBalance(address: string): Promise<TokenBalance> {
-    const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
     try {
       // Try to fetch latest balance
@@ -233,8 +280,6 @@ export default class BalanceService {
   }
 
   static async getSolBalance(address: string): Promise<TokenBalance> {
-    const redis = await createClient({ url: process.env.REDIS_URL }).connect();
-
     try {
       // Try to fetch latest balance
       const balanceData = await this.fetchSolBalance(address);

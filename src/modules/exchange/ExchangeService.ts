@@ -3,20 +3,20 @@ import PriceService from './PriceService';
 import ConfigService from './ConfigService';
 
 export default class ExchangeService {
-  static async getBalances() {
+  static async getCachedBalances() {
     try {
       // Get all wallet balances first using BalanceService
-      const ethBalance = await BalanceService.getEthBalance(
+      const ethBalance = await BalanceService.getCachedEthBalance(
         ConfigService.wallets.ETH,
       );
-      const btcBalance = await BalanceService.getBtcBalance(
+      const btcBalance = await BalanceService.getCachedBtcBalance(
         ConfigService.wallets.BTC,
       );
-      const solBalance = await BalanceService.getSolBalance(
+      const solBalance = await BalanceService.getCachedSolBalance(
         ConfigService.wallets.SOL,
       );
 
-      const priceData = await PriceService.getPrice();
+      const priceData = await PriceService.getCachedPrice();
 
       const results = {
         eth: {

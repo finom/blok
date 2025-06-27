@@ -10,7 +10,7 @@ export default class ExchangeController {
   })
   @get("", { cors: true })
   static getBalances = withZod({
-    handle: () => ExchangeService.getBalances(),
+    handle: () => ExchangeService.getCachedBalances(),
   });
 
   @openapi({
@@ -19,7 +19,7 @@ export default class ExchangeController {
   @get("total", { cors: true })
   static getTokenBalance = withZod({
     handle: async () => {
-      const { totalBalance } = await ExchangeService.getBalances();
+      const { totalBalance } = await ExchangeService.getCachedBalances();
       return totalBalance;
     }
   });

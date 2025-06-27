@@ -16,11 +16,23 @@ interface CoinMarketCapResponse {
   };
 }
 
+const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
 export default class PriceService {
+    static async getCachedPrice() {
+        try {
+            // Try to get cached data from Redis
+            const cachedData = await redis.get('price_data'); 
+            if (cachedData) {
+                return JSON.parse(cachedData) as CoinMarketCapResponse['data'];
+            }
+        } catch (error) {
+            console.error('Error fetching cached price data from Redis:', error);
+        }
+        // If no cached data, fetch the latest price
+        return await PriceService.getPrice();
+    }
     static async getPrice() {
-        const redis = await createClient({ url: process.env.REDIS_URL }).connect();
-
         try {
             // Try to fetch latest prices
             const priceData = await PriceService.fetchPrice();
@@ -42,7 +54,7 @@ export default class PriceService {
         }
     }
     static async fetchPrice() {
-              // Get token prices using CoinMarketCap API instead of CoinGecko
+      // Get token prices using CoinMarketCap API instead of CoinGecko
       const priceResponse = await fetch(
         "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC,ETH,SOL",
         {
