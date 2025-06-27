@@ -1,35 +1,34 @@
-import BalanceService from './BalanceService';
-import PriceService from './PriceService';
-import ConfigService from './ConfigService';
+import BalanceService from "./BalanceService";
+import PriceService from "./PriceService";
 
 export default class ExchangeService {
   static async getCachedBalances() {
     try {
       // Get all wallet balances first using BalanceService
-      const ethBalance = await BalanceService.getCachedEthBalance(
-        ConfigService.wallets.ETH,
-      );
-      const btcBalance = await BalanceService.getCachedBtcBalance(
-        ConfigService.wallets.BTC,
-      );
-      const solBalance = await BalanceService.getCachedSolBalance(
-        ConfigService.wallets.SOL,
-      );
+      const balances = await BalanceService.getCachedAllBalances();
 
       const priceData = await PriceService.getCachedPrice();
 
       const results = {
-        eth: {
-          ...ethBalance,
+        ETH: {
+          ...balances.ETH,
           price: priceData.ETH?.quote.USD.price || 0,
         },
-        btc: {
-          ...btcBalance,
+        BTC: {
+          ...balances.BTC,
           price: priceData.BTC?.quote.USD.price || 0,
         },
-        sol: {
-          ...solBalance,
+        SOL: {
+          ...balances.SOL,
           price: priceData.SOL?.quote.USD.price || 0,
+        },
+        ADA: {
+          ...balances.ADA,
+          price: priceData.ADA?.quote.USD.price || 0,
+        },
+        AVAX: {
+          ...balances.AVAX,
+          price: priceData.AVAX?.quote.USD.price || 0,
         },
       };
 

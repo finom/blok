@@ -21,6 +21,6 @@ export default class ExchangeController {
     handle: async () => {
       const { totalBalance } = await ExchangeService.getCachedBalances();
       return totalBalance;
-    }
+    },
   });
 }

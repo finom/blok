@@ -14,5 +14,5 @@ export const { GET, POST, PATCH, PUT, HEAD, OPTIONS, DELETE } = initVovk({
   controllers,
   onError: (error) => {
     console.error("Vovk Error:", error);
-  }
+  },
 });

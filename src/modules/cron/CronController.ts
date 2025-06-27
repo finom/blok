@@ -3,12 +3,12 @@ import { get, prefix } from "vovk";
 import PriceService from "../exchange/PriceService";
 import BalanceService from "../exchange/BalanceService";
 
-@prefix('/cron')
+@prefix("/cron")
 export default class CronController {
-    @get('fetch')
-    @cronGuard()
-    async fetchBalancesAndPrices() {
-      PriceService.getPrice();
-      BalanceService.getBalances();
-    }
+  @get("fetch")
+  @cronGuard()
+  async fetchBalancesAndPrices() {
+    PriceService.getPrice();
+    BalanceService.getCachedAllBalances();
+  }
 }
