@@ -20,7 +20,7 @@ export default class ExchangeController {
   static getTokenBalance = withZod({
     handle: async () => {
       const { totalBalance } = await ExchangeService.getCachedBalances();
-      return totalBalance ? Math.round(totalBalance) : null;
+      return typeof totalBalance === "number" ? Math.round(totalBalance) : null;
     },
   });
 }
